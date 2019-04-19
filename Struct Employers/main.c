@@ -11,6 +11,7 @@ Hay que separar librerias? pedirdatos-modificar-etc?
 MOSTRAR EMPLEADO se corre, como crear una (cuadricula)
 RAND devuelve los mismos numeros en cada uso
 MODIFICAR: como hacerlo generico, molde ya hecho
+BORRAR numero option, queda feo
 
 proxima clase:
 struct sector (id sector, description)
@@ -24,7 +25,7 @@ int main()
     int optionMod;
 
     inicializarEmpleados(lista, T);
-    hardcodearDatosEmpleados(lista, T);
+   // hardcodearDatosEmpleados(lista, T);
     do
     {
         option = optionsMenu("1.Dar de alta\n2.Dar de baja\n3.Modificar empleado\n4.Ordenar empleados por legajo\n5.Mostrar lista de empleados\n6.Salir\n");
@@ -40,6 +41,7 @@ int main()
                 do{
                 system("pause");
                 system("cls");
+                printf("Usted esta en el menu Modificar Empleado\n\n");
                 optionMod = optionsMenu("1.Modificar nombre\n2.Modificar sexo\n3.Modificar sueldo\n4.Mostrar empleados\n5.Atras\n");
                 switch (optionMod)
                 {

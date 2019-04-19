@@ -77,7 +77,7 @@ void cargarEmpleado(eEmpleado lista[], int tam)
         pedirSueldoBruto(lista, i);
         lista[i].estado = OCUPADO;
 
-
+        printf("Legajo\t\tNombre\t\t\tSexo\t\tSueldo Bruto\t\tSueldo Neto\n");
         mostrarEmpleado(lista[i]);
 
         if (verificarConformidad("Los datos ingresados son correctos?")==1)
@@ -102,7 +102,7 @@ int verificarConformidad (char message[])
     int guardo=0;
     char respuesta[2];
 
-        printf("%s\n", message);
+        printf("%s (si/no) \n", message);
         fflush(stdin);
         scanf("%s", respuesta);
 
@@ -137,7 +137,7 @@ void pedirSexo(eEmpleado lista[], int i)
     char buffer;
 
     do{
-        printf("Ingrese sexo: ");
+        printf("Ingrese sexo (f/m): ");
         fflush(stdin);
         scanf("%c", &buffer);
         buffer=toupper(buffer);
@@ -338,6 +338,3 @@ void modificarSueldo (eEmpleado lista[], int tam)
         printf("El sueldo bruto fue cambiado correctamente.\n");
    }
 }
-
-
-//pedir num legajo antes y una lista
