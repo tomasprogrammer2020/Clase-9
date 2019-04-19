@@ -17,7 +17,7 @@ int optionsMenu(char message[])
 void hardcodearDatosEmpleados(eEmpleado lista[], int tam)
 {
     int i;
-    int legajos[]={1,8,9,7,2,4};
+    int legajos[]={10,8,1,7,2,4};
     char nombres[][50]={"Maria","Pedro","Jose","Pedro","Pablo","Mateo"};
     char sexo[]={'F','M','M','M','M','M'};
     float sueldosBruto[]={1000,2000,3000,4000,5000,6000};
@@ -46,7 +46,7 @@ void inicializarEmpleados(eEmpleado lista[], int tam)
 void mostrarListaEmpleados(eEmpleado lista[], int tam)
 {
     int i;
-    printf("\nLegajo\t\tNombre\t\t\tSexo\t\tSueldo Bruto\t\tSueldo Neto\n");
+    printf("Legajo\t\tNombre\t\t\tSexo\t\tSueldo Bruto\t\tSueldo Neto\n");
     for(i=0; i<tam; i++)
     {
         if(lista[i].estado==OCUPADO)
@@ -71,22 +71,24 @@ void cargarEmpleado(eEmpleado lista[], int tam)
 
     if(i!=-1)
     {
-        printf("Ingrese legajo: ");
-        scanf("%d", &lista[i].legajo);
-        printf("Ingrese nombre: ");
-        fflush(stdin);
-        gets(lista[i].nombre);
-        printf("Ingrese sexo: ");
-        fflush(stdin);
-        scanf("%c", &lista[i].sexo);
-        printf("Ingrese sueldo bruto: ");
-        scanf("%f", &lista[i].sueldoBruto);
-        lista[i].sueldoNeto =lista[i].sueldoBruto*0.85;
+        lista[i].legajo=rand() % 9999999;
+        pedirNombre(lista, i);
+        pedirSexo(lista, i);
+        pedirSueldoBruto(lista, i);
         lista[i].estado = OCUPADO;
 
-        lista[i].sexo=toupper(lista[i].sexo);
-        pasarMayusPrimeras(lista, i);
-        mensajeSexoAlta (lista, i);
+
+        mostrarEmpleado(lista[i]);
+
+        if (verificarConformidad("Los datos ingresados son correctos?")==1)
+        {
+            mensajeSexo (lista, i, "dada de alta", "dado de alta");
+        }
+        else
+        {
+            printf("El empleado no sera cargado\n");
+            lista[i].estado = LIBRE;
+        }
 
     }
     else
@@ -95,17 +97,73 @@ void cargarEmpleado(eEmpleado lista[], int tam)
     }
 }
 
-void mensajeSexoAlta (eEmpleado lista[], int i)
+int verificarConformidad (char message[])
 {
-         if (lista[i].sexo=='F')
-         {
-             printf("\nLa empleada %s fue cargada con exito\n", lista[i].nombre);
-         }
-         else
-         {
-             printf("\nEl empleado %s fue cargado con exito\n", lista[i].nombre);
-         }
+    int guardo=0;
+    char respuesta[2];
+
+        printf("%s\n", message);
+        fflush(stdin);
+        scanf("%s", respuesta);
+
+        if (strcmp(respuesta, "si")==0)
+        {
+            guardo=1;
+        }
+
+        return guardo;
 }
+void pedirSueldoBruto (eEmpleado lista[], int i)
+{
+    float aux;
+    do{
+    printf("Ingrese sueldo bruto: ");
+    scanf("%f", &aux);
+
+    if (aux<0 /*|| isdigit(aux)==0*/)
+    {
+        printf("Error, el sueldo ingresado es invalido. Ingreselo nuevamente\n");
+    }
+
+    } while (aux<0 /*|| isdigit(aux)==0*/);
+
+            lista[i].sueldoBruto=aux;
+            lista[i].sueldoNeto= lista[i].sueldoBruto * 0.85;
+
+
+}
+void pedirSexo(eEmpleado lista[], int i)
+{
+    char buffer;
+
+    do{
+        printf("Ingrese sexo: ");
+        fflush(stdin);
+        scanf("%c", &buffer);
+        buffer=toupper(buffer);
+
+        if (buffer != 'F' && buffer != 'M')
+        {
+            printf("Error, el sexo ingresado no existe. Ingreselo nuevamente\n");
+        }
+
+    } while(buffer != 'F' && buffer != 'M');
+
+    lista[i].sexo=buffer;
+}
+
+void pedirNombre(eEmpleado lista[], int i)
+{
+    char buffer[100];
+
+    printf("Ingrese nombre: ");
+    fflush(stdin);
+    scanf("%[^\n]",buffer);
+
+    pasarMayusPrimeras(buffer);
+    strcpy (lista[i].nombre, buffer);
+}
+
 
 int buscarLibre(eEmpleado lista[], int tam)
 {
@@ -130,7 +188,7 @@ int flag=0;
 int legajo;
 int i;
 
-legajo = getInt("numero de legajo");
+legajo = getInt("el numero de legajo");
 
 
     for (i=0; i<tam;i++)
@@ -155,7 +213,7 @@ int getInt (char message[])
 {
     int number;
 
-     printf("\nIngrese %s: ", message);
+     printf("Ingrese %s: ", message);
      scanf("%d", &number);
 
 return number;
@@ -165,70 +223,121 @@ void darDeBaja (eEmpleado lista[], int tam)
 {
     int i;
 
+    mostrarListaEmpleados(lista, tam);
     i = buscarLegajo(lista, tam);
 
     if (i!=-1)
     {
         lista[i].estado=LIBRE;
-        mensajeSexoBaja (lista, i);
+        mensajeSexo (lista, i, "dada de baja", "dado de baja");
     }
 }
 
-void mensajeSexoBaja (eEmpleado lista[], int i)
+void mensajeSexo (eEmpleado lista[], int i, char mensajeF[], char mensajeM[])
 {
          if (lista[i].sexo=='F')
          {
-             printf("\nLa empleada %s fue dada de baja con exito\n", lista[i].nombre);
+             printf("\nLa empleada %s fue %s con exito\n", lista[i].nombre, mensajeF);
          }
          else
          {
-             printf("\nEl empleado %s fue dado de baja con exito\n", lista[i].nombre);
+             printf("\nEl empleado %s fue %s con exito\n", lista[i].nombre, mensajeM);
          }
 }
 
-void pasarMayusPrimeras(eEmpleado lista[], int i)
+void pasarMayusPrimeras(char nombre[])
 {
-strlwr(lista[i].nombre);
+strlwr(nombre);
 
-lista[i].nombre[0] = toupper(lista[i].nombre[0]);
+nombre[0] = toupper(nombre[0]);
 int j=0;
 
-while(lista[i].nombre[j]!='\0')
+while(nombre[j]!='\0')
 {
 
-    if(lista[i].nombre[j]==' ')
+    if(nombre[j]==' ')
     {
-        lista[i].nombre[j+1]= toupper (lista[i].nombre[j+1]);
+        nombre[j+1]= toupper (nombre[j+1]);
 
     }
     j++;
 }
 }
 
-/*
-void modificar(eEmpleado lista[], int tam, int legajo)
+void ordenarVector(eEmpleado lista[], int tam)
 {
-    int flag=0;
+    int i, j;
+    eEmpleado aux[1];
 
-        for (i=0; i<tam;i++)
+    for (i=0; i<tam-1; i++)
+    {
+        for (j=i+1; j<tam; j++)
         {
-            if (lista[i].legajo==legajo)
-            {
-                printf("Ingrese nuevo sueldo bruto: ");
-                scanf("%d", &nuevoDato);
-                lista[i].sueldoBruto = nuevoDato;
-                lista[i].sueldoNeto = nuevoDato * 0.85;
-                printf("El sueldo bruto fue cambiado con exito\n");
-                flag=1;
-                break;
-            }
-        }
-
-        if (flag==0;
+            if (lista[i].legajo>lista[j].legajo)
         {
-            printf("El legajo no fue encontrado\n");
+            aux[0] = lista[i];
+            lista[i]= lista[j];
+            lista[j]= aux[0];
         }
-
-
+        }
+    }
 }
-*/
+
+
+void modificarSexo (eEmpleado lista[], int tam)
+{
+    eEmpleado aux[1];
+    int i;
+    mostrarListaEmpleados(lista, tam);
+    i=buscarLegajo(lista, tam);
+
+    if (i!=-1)
+   {
+       do{
+        system("cls");
+        pedirSexo(aux,0);
+        } while (verificarConformidad("El sexo ingresado es correcto?")!=1);
+        lista[i].sexo=aux[0].sexo;
+        printf("El sexo fue cambiado correctamente.\n");
+}
+}
+
+void modificarNombre (eEmpleado lista[], int tam)
+{
+    eEmpleado aux[1];
+    int i;
+    mostrarListaEmpleados(lista, tam);
+    i=buscarLegajo(lista, tam);
+
+    if (i!=-1)
+   {
+       do{
+        system("cls");
+        pedirNombre(aux,0);
+        } while (verificarConformidad("El nombre ingresado es correcto?")!=1);
+        strcpy(lista[i].nombre,aux[0].nombre);
+        printf("El nombre fue cambiado correctamente.\n");
+   }
+}
+
+void modificarSueldo (eEmpleado lista[], int tam)
+{
+    eEmpleado aux[1];
+    int i;
+    mostrarListaEmpleados(lista, tam);
+    i=buscarLegajo(lista, tam);
+
+    if (i!=-1)
+   {
+       do{
+        system("cls");
+        pedirSueldoBruto(aux,0);
+        } while (verificarConformidad("El sueldo bruto es correcto?")!=1);
+        lista[i].sueldoBruto=aux[0].sueldoBruto;
+        lista[i].sueldoNeto=lista[i].sueldoBruto*0.85;
+        printf("El sueldo bruto fue cambiado correctamente.\n");
+   }
+}
+
+
+//pedir num legajo antes y una lista

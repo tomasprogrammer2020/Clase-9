@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1555678101 source:c:\users\lucia\onedrive\escritorio\struct employers\main.c
+	<stdio.h>
+	<stdlib.h>
+	"Employers.h"
+
+1555678761 c:\users\lucia\onedrive\escritorio\struct employers\employers.h
+
+1555678258 source:c:\users\lucia\onedrive\escritorio\struct employers\employers.c
+	"Employers.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+

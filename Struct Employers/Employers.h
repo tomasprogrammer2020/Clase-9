@@ -16,6 +16,12 @@ typedef struct
     int estado;
 } eEmpleado;
 
+typedef struct
+{
+    int idSector;
+    char description[];
+}eSector;
+
 int optionsMenu(char[]);
 int optionsMenu(char[]);
 void hardcodearDatosEmpleados(eEmpleado[], int);
@@ -27,6 +33,14 @@ void mostrarListaEmpleados(eEmpleado[], int);
 int buscarLegajo (eEmpleado[], int );
 int getInt (char[]);
 void darDeBaja (eEmpleado[], int);
-void mensajeSexoAlta (eEmpleado[], int);
-void mensajeSexoBaja (eEmpleado[], int);
-void pasarMayusPrimeras(eEmpleado[], int);
+void mensajeSexo (eEmpleado lista[], int i, char mensajeF[], char mensajeM[]);
+void pasarMayusPrimeras(char[]);
+void pedirNombre(eEmpleado[], int);
+void pedirSexo(eEmpleado[], int);
+void pedirSueldoBruto (eEmpleado[], int);
+int verificarConformidad (char[]);
+void ordenarVector(eEmpleado[], int);
+void modificarSueldo (eEmpleado[], int);
+void modificarSexo (eEmpleado[], int);
+void modificarNombre (eEmpleado[], int);
+void modificarSexo (eEmpleado[], int);
